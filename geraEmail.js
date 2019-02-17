@@ -48,7 +48,13 @@ async function geraEmail() {
     const template = fs.readFileSync(path.join(__dirname, 'lista.hbs'), 'utf8')
     const output = handlebars.compile(template)(context)
     const outputPath = path.join(__dirname, 'output', 'email.html')
-    fs.writeFileSync(outputPath, output, 'utf8')
+
+    try {
+      fs.writeFileSync(outputPath, output, 'utf8')
+    } catch (error) {
+      fs.mkdirSync('output')
+      fs.writeFileSync(outputPath, output, 'utf8')
+    }
 
     // Abre thunderbird
     const subject = 'Imóveis Disponíveis'
