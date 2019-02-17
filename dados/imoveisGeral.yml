@@ -1,0 +1,36 @@
+# Proibido usar dois pontos ":" em todo o arquivo
+# Copiar do traço até o fim da descrição
+- 
+  Nome:
+  # Conjunto Comercial, Apartamento, Galpão
+  Tipo:
+  Endereco:
+  # Venda, Locação, Venda/Locação
+  Disponibilidade:
+  Link das Fotos:
+  Link do Google Street View:
+  Area Privativa:
+  Valor de Locação:
+  Valor de Venda:
+  Condomínio:
+  IPTU:
+  Descricao: >
+    insira a descrição aqui
+
+- 
+  Nome: Led Barra Funda
+  # Conjunto Comercial, Apartamento, Galpão
+  Tipo: Conjunto Comercial
+  Endereco: Rua Aqui, 123
+  # Venda, Locação, Venda/Locação
+  Disponibilidade: Venda
+  Link das Fotos: http://www.google.com
+  Link do Google Street View:
+  Area Privativa: 200m2
+  Valor de Locação: R$3.500,00
+  Valor de Venda: R$2.000.000,00
+  Condomínio: R$350,00
+  IPTU: R$100,00
+  Descricao: >
+    das Apartamento osps
+

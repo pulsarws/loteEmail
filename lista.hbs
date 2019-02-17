@@ -1,0 +1,85 @@
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=600px, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Imóveis Disponíveis</title>
+</head>
+
+<body style="width: 600px; margin: 3em auto">
+  <p>Prezado(a), </p>
+  <br>
+  <p>{{texto.introdução}}</p>
+  <p style="padding: 0.5em 0; font-size: 1.1em; font-weight: bolder">{{texto.condições}}</p>
+  <p style="padding: 1em; border: 2px solid red"><b>NOVIDADES:</b> {{texto.novidades}}</p>
+
+  {{#each imoveis as | lista Tipo |}}
+  <section>
+    <h2 style="border-bottom: 1px solid black; margin: 1em 0">{{Tipo}}</h2>
+    {{#each lista as | imovel |}}
+    <h3 style="margin-bottom: 1em">{{imovel.Nome}}</h3>
+    <p>{{imovel.Descricao}}</p>
+    <table style="width: 100%; border-collapse: collapse">
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px">Endereço</td>
+        <td style="border: 1px solid #ccc; padding: 8px">{{imovel.Endereco}}</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px">Disponibilidade</td>
+        <td style="border: 1px solid #ccc; padding: 8px">{{imovel.Disponibilidade}}</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px">Area Privativa</td>
+        <td style="border: 1px solid #ccc; padding: 8px">{{imovel.[Area Privativa]}}</td>
+      </tr>
+      {{#if imovel.[Valor de Locação]}}
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px">Valor de Locação</td>
+        <td style="border: 1px solid #ccc; padding: 8px">{{imovel.[Valor de Locação]}}</td>
+      </tr>
+      {{/if}}
+      {{#if imovel.[Valor de Venda]}}
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px">Valor de Venda</td>
+        <td style="border: 1px solid #ccc; padding: 8px">{{imovel.[Valor de Venda]}}</td>
+      </tr>
+      {{/if}}
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px">Condomínio</td>
+        <td style="border: 1px solid #ccc; padding: 8px">{{imovel.Condomínio}}</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px">IPTU</td>
+        <td style="border: 1px solid #ccc; padding: 8px">{{imovel.IPTU}}</td>
+      </tr>
+      {{#if imovel.[Link das Fotos]}}
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px">Link das Fotos:</td>
+        <td style="border: 1px solid #ccc; padding: 8px">
+          <a href="{{imovel.[Link das Fotos]}}" target="_blank">Clique Aqui</a></td>
+      </tr>
+      {{/if}}
+      {{#if imovel.[Link do Google Street View]}}
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px">Link do Google Street View:</td>
+        <td style="border: 1px solid #ccc; padding: 8px">
+          <a href="{{imovel.[Link do Google Street View]}}" target="_blank">Clique Aqui</a></td>
+      </tr>
+      {{/if}}
+    </table>
+    <br>
+    {{/each}}
+  </section>
+  {{/each}}
+    
+    <ul style="list-style-type: none">
+      <li style="font-weight: bold">Contatos:</li>
+      <li>Telefone: <a href="tels:{{texto.telefoneParam}}">{{texto.telefoneText}}</a></li>
+      <li>WhatsApp: <a href="whatsapp://send?phone={{texto.whatsappParam}}">{{texto.whatsappText}}</a></li>
+      <li>Email: <a href="mailto:{{texto.email}}">{{texto.email}}</a></li>
+    </ul>
+  <p>Caso não queira receber mais nossa lista de imóveis, solicite respondendo a esse e-mail.</p>
+</body>
+
+</html>

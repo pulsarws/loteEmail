@@ -1,0 +1,19 @@
+{
+  "name": "loteemail",
+  "version": "1.0.0",
+  "description": "",
+  "main": "geraLote.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^7.0.1",
+    "handlebars": "^4.1.0",
+    "inquirer": "^6.2.2",
+    "js-yaml": "^3.12.1",
+    "lodash": "^4.17.11",
+    "shelljs": "^0.8.3"
+  }
+}
