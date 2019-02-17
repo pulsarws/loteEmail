@@ -8,6 +8,7 @@
             "request": "launch",
             "name": "Launch gera",
             "program": "${workspaceFolder}/geraLote.js",
+            "console": "integratedTerminal",
             "skipFiles": [
                 "${workspaceRoot}/node_modules/**/*.js",
                 "<node_internals>/**/*.js"
@@ -16,8 +17,9 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch index",
-            "program": "${workspaceFolder}/index.js",
+            "name": "Launch geraEmail",
+            "program": "${workspaceFolder}/geraEmail.js",
+            "console": "integratedTerminal",
             "skipFiles": [
                 "${workspaceRoot}/node_modules/**/*.js",
                 "<node_internals>/**/*.js"

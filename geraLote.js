@@ -1,9 +1,13 @@
 const fs = require('fs-extra')
+const path = require('path')
 const _ = require('lodash')
 const inquirer = require('inquirer')
+const yaml = require('js-yaml')
 
-//item.match(/(.+?)(\.[^.]*$|$)/)[1]
-const listaArquivosDados = fs.readdirSync('./contatos', 'utf8')
+const config = yaml.safeLoad(
+  fs.readFileSync(path.join(__dirname, 'config.yml'), 'utf8')
+)
+const listaArquivosDados = fs.readdirSync(config.listasEmailPath, 'utf8')
 
 async function geraLote() {
   try {
@@ -19,7 +23,10 @@ async function geraLote() {
 
     // Cria array de emails
     const listaEmail = _.chain(
-      fs.readFileSync('./contatos/' + escolha.escolha, 'utf8')
+      fs.readFileSync(
+        path.join(config.listasEmailPath, escolha.escolha),
+        'utf8'
+      )
     )
       .split('\n')
       .drop()
@@ -30,16 +37,18 @@ async function geraLote() {
     const dir = escolha.escolha.match(/(.+?)(\.[^.]*$|$)/)[1]
 
     //Gera arquivos
-    var i = 1
     // if (fs.existsSync(`./lotes/${dir}`)) fs.rmdirSync(`./lotes/${dir}`)
-    fs.removeSync(`./lotes/${dir}`)
-    fs.mkdirSync(`./lotes/${dir}`)
-
+    fs.removeSync(path.join(config.lotesPath, dir))
+    fs.mkdirSync(path.join(config.lotesPath, dir))
+    var i = 1
     const lotesCsv = _.chain(lotes)
       .map(lote => ['email', ...lote])
       .map(lote => _.join(lote, '\n'))
       .map(lote => {
-        const file = fs.promises.writeFile(`./lotes/${dir}/${dir}-${i}.csv`, lote)
+        const file = fs.promises.writeFile(
+          path.join(config.lotesPath, dir, `${dir}- ${i}.csv`),
+          lote
+        )
         i++
         return file
       })

@@ -11,11 +11,13 @@ shell.config.silent = true
 
 async function geraEmail() {
   try {
-    const outputPath = path.join(__dirname, 'output', 'email.html')
+    const config = yaml.safeLoad(
+      fs.readFileSync(path.join(__dirname, 'config.yml'), 'utf8')
+    )
 
     // Gera context do hbs
     const texto = yaml.safeLoad(
-      fs.readFileSync(path.join(__dirname, '/dados/texto.yml'), 'utf8')
+      fs.readFileSync(path.join(config.conteudoPath, 'texto.yml'), 'utf8')
     )
 
     const arquivo = await inquirer.prompt([
@@ -23,11 +25,13 @@ async function geraEmail() {
         name: 'escolha',
         type: 'list',
         message: 'Escolha a lista',
-        choices: fs.readdirSync(path.join(__dirname, 'dados')).filter(item => item.startsWith('imoveis'))
+        choices: fs
+          .readdirSync(config.conteudoPath)
+          .filter(item => item.startsWith('imoveis'))
       }
     ])
     const lista = yaml.safeLoad(
-      fs.readFileSync(path.join(__dirname, 'dados', arquivo.escolha), 'utf8')
+      fs.readFileSync(path.join(config.conteudoPath, arquivo.escolha), 'utf8')
     )
 
     const imoveis = _.chain(lista)
@@ -41,8 +45,9 @@ async function geraEmail() {
     }
 
     //Gera html
-    const template = fs.readFileSync(path.join(__dirname, '/lista.hbs'), 'utf8')
+    const template = fs.readFileSync(path.join(__dirname, 'lista.hbs'), 'utf8')
     const output = handlebars.compile(template)(context)
+    const outputPath = path.join(__dirname, 'output', 'email.html')
     fs.writeFileSync(outputPath, output, 'utf8')
 
     // Abre thunderbird
