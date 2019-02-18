@@ -3,10 +3,16 @@ const path = require('path')
 const _ = require('lodash')
 const inquirer = require('inquirer')
 const yaml = require('js-yaml')
+const shell = require('shelljs')
 
-const config = yaml.safeLoad(
-  fs.readFileSync(path.join(__dirname, 'config.yml'), 'utf8')
-)
+var config = shell.cat('./config.yml')
+if (config.code !== 0) {
+  var erro = 'Erro: crie arquivo config.yml no seguinte formato:\n\n'
+  erro += fs.readFileSync(path.join(__dirname, 'configExemplo.yml'), 'utf8')
+  throw erro
+}
+config = yaml.safeLoad(config.toString())
+
 const listaArquivosDados = fs.readdirSync(config.listasEmailPath, 'utf8')
 
 async function geraLote() {

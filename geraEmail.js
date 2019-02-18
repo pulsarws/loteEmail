@@ -11,13 +11,17 @@ shell.config.silent = true
 
 async function geraEmail() {
   try {
-    const config = yaml.safeLoad(
-      fs.readFileSync(path.join(__dirname, 'config.yml'), 'utf8')
-    )
+    var config = shell.cat('./config.yml')
+    if (config.code !== 0) {
+      var erro = 'Erro: crie arquivo config.yml no seguinte formato:\n\n'
+      erro += fs.readFileSync(path.join(__dirname, 'configExemplo.yml'), 'utf8')
+      throw erro
+    }
+    config = yaml.safeLoad(config.toString())
 
     // Gera context do hbs
     const texto = yaml.safeLoad(
-      fs.readFileSync(path.join(config.conteudoPath, 'texto.yml'), 'utf8')
+      shell.cat(path.join(config.conteudoPath, 'texto.yml'))
     )
 
     const arquivo = await inquirer.prompt([
@@ -47,14 +51,10 @@ async function geraEmail() {
     //Gera html
     const template = fs.readFileSync(path.join(__dirname, 'lista.hbs'), 'utf8')
     const output = handlebars.compile(template)(context)
-    const outputPath = path.join(__dirname, 'output', 'email.html')
+    const outputPath = path.join(shell.pwd().toString(), 'output', 'email.html')
 
-    try {
-      fs.writeFileSync(outputPath, output, 'utf8')
-    } catch (error) {
-      fs.mkdirSync('output')
-      fs.writeFileSync(outputPath, output, 'utf8')
-    }
+    shell.mkdir('output')
+    shell.echo(output).to(outputPath)
 
     // Abre thunderbird
     const subject = 'Imóveis Disponíveis'

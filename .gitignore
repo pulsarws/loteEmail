@@ -1,6 +1,7 @@
 # App Specific
 output/*
 config.yml
+build/*
 
 # Logs
 logs
