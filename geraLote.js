@@ -56,8 +56,14 @@ async function geraLote() {
       .value()
 
     await Promise.all(lotesCsv)
+    console.log('Salvo com Sucesso. Saindo em 5 segundos')
+    setTimeout(() =>{
+    }, 5000)
   } catch (error) {
     console.log(error)
+    console.log('Saindo em 5 segundos')
+    setTimeout(() => {
+    }, 5000)
   }
 }
 
