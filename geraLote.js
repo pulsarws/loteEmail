@@ -1,7 +1,8 @@
-const fs = require('fs-extra')
+const fs = require('fs')
 const path = require('path')
 const _ = require('lodash')
 const inquirer = require('inquirer')
+const shell = require('shelljs')
 
 const utils = require('./utils')
 
@@ -39,8 +40,9 @@ async function geraLote() {
 
     //Gera arquivos
     // if (fs.existsSync(`./lotes/${dir}`)) fs.rmdirSync(`./lotes/${dir}`)
-    fs.removeSync(path.join(config.lotesPath, dir))
-    fs.mkdirSync(path.join(config.lotesPath, dir))
+
+    shell.rm('-rf', path.join(config.lotesPath, dir))
+    shell.mkdir(path.join(config.lotesPath, dir))
     var i = 1
     const lotesCsv = _.chain(lotes)
       .map(lote => ['email', ...lote])
