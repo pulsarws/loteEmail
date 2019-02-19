@@ -5,19 +5,16 @@ const inquirer = require('inquirer')
 const yaml = require('js-yaml')
 const shell = require('shelljs')
 
-var config = shell.cat('./config.yml')
-if (config.code !== 0) {
-  var erro = 'Erro: crie arquivo config.yml no seguinte formato:\n\n'
-  erro += fs.readFileSync(path.join(__dirname, 'configExemplo.yml'), 'utf8')
-  throw erro
-}
-config = yaml.safeLoad(config.toString())
-
-const listaArquivosDados = fs.readdirSync(config.listasEmailPath, 'utf8')
+const utils = require('./utils')
 
 async function geraLote() {
   try {
+    // Carrega config.yml
+    const config = await utils.loadConfig
+
+
     // Escolha arquivo
+    const listaArquivosDados = fs.readdirSync(config.listasEmailPath, 'utf8')
     const escolha = await inquirer.prompt([
       {
         name: 'escolha',

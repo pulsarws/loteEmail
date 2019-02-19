@@ -1,23 +1,19 @@
 const fs = require('fs')
 const path = require('path')
-
 const shell = require('shelljs')
 const yaml = require('js-yaml')
 const handlebars = require('handlebars')
 const _ = require('lodash')
 const inquirer = require('inquirer')
 
+const utils = require('./utils')
+
 shell.config.silent = true
 
 async function geraEmail() {
   try {
-    var config = shell.cat('./config.yml')
-    if (config.code !== 0) {
-      var erro = 'Erro: crie arquivo config.yml no seguinte formato:\n\n'
-      erro += fs.readFileSync(path.join(__dirname, 'configExemplo.yml'), 'utf8')
-      throw erro
-    }
-    config = yaml.safeLoad(config.toString())
+    // Carrega config.yml
+    const config = await utils.loadConfig
 
     // Gera context do hbs
     const texto = yaml.safeLoad(
@@ -54,7 +50,7 @@ async function geraEmail() {
     const outputPath = path.join(shell.pwd().toString(), 'output', 'email.html')
 
     shell.mkdir('output')
-    shell.echo(output).to(outputPath)
+    shell.ShellString(output).to(outputPath)
 
     // Abre thunderbird
     const subject = 'Imóveis Disponíveis'
