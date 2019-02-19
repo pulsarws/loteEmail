@@ -2,8 +2,6 @@ const fs = require('fs-extra')
 const path = require('path')
 const _ = require('lodash')
 const inquirer = require('inquirer')
-const yaml = require('js-yaml')
-const shell = require('shelljs')
 
 const utils = require('./utils')
 
