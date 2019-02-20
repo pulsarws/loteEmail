@@ -2,7 +2,6 @@ const fs = require('fs')
 const promisify = require('util').promisify
 const path = require('path')
 const shell = require('shelljs')
-const yaml = require('js-yaml')
 const handlebars = require('handlebars')
 const _ = require('lodash')
 const inquirer = require('inquirer')
