@@ -39,13 +39,13 @@ async function geraEmail() {
 
     var texto = await xlsxPromise({
       input: path.join(config.conteudoPath, arquivo.texto),
-      output: path.join(__dirname, 'output', arquivo.texto + '.json')
+      output: null
     })
     texto = texto[0]
 
     var lista = await xlsxPromise({
       input: path.join(config.conteudoPath, arquivo.lista),
-      output: path.join(__dirname, 'output', arquivo.introducao + '.json')
+      output: null
     })
     lista = lista.filter(item => item.Nome !== '')
 
