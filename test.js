@@ -1,11 +1,8 @@
-const fs = require('fs')
-const path = require('path')
+const low = require('lowdb')
+const mem = require('lowdb/adapters/Memory')
 
-const dirPath = path.join(__dirname, 'teste')
-
-if (fs.existsSync(dirPath)) {
-  fs.rm
-  fs.rmdirSync(dirPath)
-}
-fs.mkdirSync(dirPath)
-fs.writeFileSync(path.join(dirPath, 'opa.txt'), 'numero 1', 'utf8')
+const adapter = new mem()
+const db = low(adapter)
+db.defaults({ lotes: [] }).write()
+db.set('lotes', { a: 1 }).write()
+console.log(db.value())

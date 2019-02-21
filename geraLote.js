@@ -2,15 +2,16 @@ const fs = require('fs')
 const path = require('path')
 const _ = require('lodash')
 const inquirer = require('inquirer')
-const shell = require('shelljs')
+const low = require('lowdb')
+const FileSync = require('lowdb/adapters/FileSync.js')
 
 const utils = require('./utils')
+const LOTEDIRTEMP = path.join(__dirname, 'output')
 
 async function geraLote() {
   try {
     // Carrega config.yml
     const config = await utils.loadConfig
-
 
     // Escolha arquivo
     const listaArquivosDados = fs.readdirSync(config.listasEmailPath, 'utf8')
@@ -33,39 +34,29 @@ async function geraLote() {
       .split('\n')
       .drop()
       .compact()
-      .value()
-    const chunkSize = Math.ceil(listaEmail.length / 20)
-    const lotes = _.chunk(listaEmail, chunkSize)
-    const dir = escolha.escolha.match(/(.+?)(\.[^.]*$|$)/)[1]
-
-    //Gera arquivos
-    // if (fs.existsSync(`./lotes/${dir}`)) fs.rmdirSync(`./lotes/${dir}`)
-
-    shell.rm('-rf', path.join(config.lotesPath, dir))
-    shell.mkdir(path.join(config.lotesPath, dir))
-    var i = 1
-    const lotesCsv = _.chain(lotes)
-      .map(lote => ['email', ...lote])
-      .map(lote => _.join(lote, '\n'))
-      .map(lote => {
-        const file = fs.promises.writeFile(
-          path.join(config.lotesPath, dir, `${dir}- ${i}.csv`),
-          lote
-        )
-        i++
-        return file
-      })
+      .map(email => ({
+        email,
+        enviado: false
+      }))
       .value()
 
-    await Promise.all(lotesCsv)
+    //Gera lowdb
+    const fileName = escolha.escolha.match(/(.+?)(\.[^.]*$|$)/)[1]
+    var hoje = new Date()
+    hoje = `${hoje.getDate()}-${hoje.getMonth() + 1}-${hoje.getFullYear()}`
+    const adapter = new FileSync(
+      path.join(LOTEDIRTEMP, `${fileName}_${hoje}.json`)
+    )
+    const db = low(adapter)
+
+    db.set('lote', listaEmail).write()
+
     console.log('Salvo com Sucesso. Saindo em 5 segundos')
-    setTimeout(() =>{
-    }, 5000)
+    setTimeout(() => {}, 5000)
   } catch (error) {
     console.log(error)
     console.log('Saindo em 5 segundos')
-    setTimeout(() => {
-    }, 5000)
+    setTimeout(() => {}, 5000)
   }
 }
 

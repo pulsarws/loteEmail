@@ -28,7 +28,7 @@ async function geraEmail() {
           .filter(item => item.startsWith('imoveis'))
       },
       {
-        name: 'introducao',
+        name: 'texto',
         type: 'list',
         message: 'Escolha arquivo de texto',
         choices: fs
@@ -38,8 +38,8 @@ async function geraEmail() {
     ])
 
     var texto = await xlsxPromise({
-      input: path.join(config.conteudoPath, arquivo.introducao),
-      output: path.join(__dirname, 'output', arquivo.introducao + '.json')
+      input: path.join(config.conteudoPath, arquivo.texto),
+      output: path.join(__dirname, 'output', arquivo.texto + '.json')
     })
     texto = texto[0]
 
@@ -50,7 +50,6 @@ async function geraEmail() {
     lista = lista.filter(item => item.Nome !== '')
 
     const imoveis = _.chain(lista)
-      .drop()
       .groupBy(item => item.Tipo)
       .value()
 
@@ -62,19 +61,11 @@ async function geraEmail() {
     //Gera html
     const template = fs.readFileSync(path.join(__dirname, 'lista.hbs'), 'utf8')
     const output = handlebars.compile(template)(context)
-    const outputPath = path.join(shell.pwd().toString(), 'output', 'email.html')
 
-    shell.mkdir('output')
-    shell.ShellString(output).to(outputPath)
-
-    // Abre thunderbird
-    const subject = 'Imóveis Disponíveis'
-    shell.exec(
-      `thunderbird --compose "to={{email}},message=${outputPath},subject=${subject}"`
-    )
+    return output
   } catch (error) {
     console.log(error)
   }
 }
 
-geraEmail()
+module.exports = geraEmail
