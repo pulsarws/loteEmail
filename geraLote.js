@@ -6,15 +6,14 @@ const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync.js')
 
 const utils = require('./utils')
-const LOTEDIRTEMP = path.join(__dirname, 'output')
 
 async function geraLote() {
   try {
     // Carrega config.yml
-    const config = await utils.loadConfig
+    const config = utils.loadConfig()
 
     // Escolha arquivo
-    const listaArquivosDados = fs.readdirSync(config.listasEmailPath, 'utf8')
+    const listaArquivosDados = fs.readdirSync(config.path.listasEmailPath, 'utf8')
     const escolha = await inquirer.prompt([
       {
         name: 'escolha',
@@ -27,7 +26,7 @@ async function geraLote() {
     // Cria array de emails
     const listaEmail = _.chain(
       fs.readFileSync(
-        path.join(config.listasEmailPath, escolha.escolha),
+        path.join(config.path.listasEmailPath, escolha.escolha),
         'utf8'
       )
     )
@@ -45,7 +44,7 @@ async function geraLote() {
     var hoje = new Date()
     hoje = `${hoje.getDate()}-${hoje.getMonth() + 1}-${hoje.getFullYear()}`
     const adapter = new FileSync(
-      path.join(LOTEDIRTEMP, `${fileName}_${hoje}.json`)
+      path.join(config.path.lotesPath, `${fileName}_${hoje}.json`)
     )
     const db = low(adapter)
 
@@ -60,4 +59,4 @@ async function geraLote() {
   }
 }
 
-geraLote()
+module.exports = geraLote

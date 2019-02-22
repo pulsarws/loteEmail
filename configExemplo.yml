@@ -1,3 +1,13 @@
-listasEmailPath: path
-lotesPath: path
-conteudoPath: path
+path:
+  listasEmailPath: path
+  lotesPath: path
+  conteudoPath: path
+transport: 
+  host: ''
+  port: 
+  secure: true
+  auth:
+    user: ''
+    pass: ''
+  tls:
+    rejectUnauthorized: 

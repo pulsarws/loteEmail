@@ -5,7 +5,7 @@
     "main": "geraLote.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "pkg -t linux-x64,windows-x64 --options 'no-warnings'  -o build/geraLote geraLote.js && pkg -t linux-x64,windows-x64 --options 'no-warnings'  -o build/geraEmail geraEmail.js"
+        "build": "pkg -t linux-x64,windows-x64 --options 'no-warnings'  -o build/index index.js"
     },
     "author": "",
     "license": "ISC",
@@ -25,6 +25,6 @@
         "xlsx-to-json": "^0.3.0"
     },
     "pkg": {
-        "assets": "lista.hbs"
+        "assets": ["lista.hbs", "configExemplo.yml"]
     }
 }

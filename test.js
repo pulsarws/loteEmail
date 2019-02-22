@@ -1,4 +1,7 @@
 const _ = require('lodash')
+const opn = require('opn')
+
+opn('/home/eduardo/projects/loteEmail')
 
 var a = [
   { userId: 'p1', item: 1 },
@@ -8,18 +11,25 @@ var a = [
 
 var b = [
   { userId: 'p1', profile: 1 },
+  { userId: 'p1', profile: 5 },
   { userId: 'p2', profile: 2 },
   { userId: 'p4', profile: 4 }
 ]
 
-var u = _.map(a, function(obj) {
-  // add the properties from second array matching the userID
-  // to the object from first array and return the updated object
-  return _.assign(obj, _.find(b, { userId: obj.userId }))
-})
-
-const join = (base, toJoin, key) => {
-  return _.map(base, item => _.assign(item, _.find(toJoin, )))
+function join(local, foreign, localKey, foreignKey, as = 'foreign') {
+  return _.map(local, itemLocal =>
+    _.assign(
+      itemLocal,
+      _.fromPairs([
+        'as',
+        _.filter(
+          foreign,
+          foreignItem => itemLocal[localKey] === foreignItem[foreignKey]
+        )
+      ])
+    )
+  )
 }
 
-console.log(u)
+const result = join(a, b, 'userId', 'userId', 'b')
+console.log(JSON.stringify(result, undefined, 2))

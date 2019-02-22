@@ -15,7 +15,7 @@ shell.config.silent = true
 async function geraEmail() {
   try {
     // Carrega config.yml
-    const config = await utils.loadConfig
+    const config = utils.loadConfig()
 
     // Gera context do hbs  
     const arquivo = await inquirer.prompt([
@@ -24,7 +24,7 @@ async function geraEmail() {
         type: 'list',
         message: 'Escolha a lista',
         choices: fs
-          .readdirSync(config.conteudoPath)
+          .readdirSync(config.path.conteudoPath)
           .filter(item => item.startsWith('imoveis'))
       },
       {
@@ -32,19 +32,19 @@ async function geraEmail() {
         type: 'list',
         message: 'Escolha arquivo de texto',
         choices: fs
-          .readdirSync(config.conteudoPath)
+          .readdirSync(config.path.conteudoPath)
           .filter(item => item.startsWith('texto'))
       }
     ])
 
     var texto = await xlsxPromise({
-      input: path.join(config.conteudoPath, arquivo.texto),
+      input: path.join(config.path.conteudoPath, arquivo.texto),
       output: null
     })
     texto = texto[0]
 
     var lista = await xlsxPromise({
-      input: path.join(config.conteudoPath, arquivo.lista),
+      input: path.join(config.path.conteudoPath, arquivo.lista),
       output: null
     })
     lista = lista.filter(item => item.Nome !== '')

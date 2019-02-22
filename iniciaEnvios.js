@@ -8,10 +8,10 @@ const FileSync = require('lowdb/adapters/FileSync')
 const utils = require('./utils')
 const geraEmail = require('./geraEmail')
 
-const LOTEDIRTEMP = path.join(__dirname, 'output')
-
 async function enviaEmail() {
   try {
+    // Carrega config.yml
+    const config = utils.loadConfig()
     // Confirma corpo do email
     const html = await geraEmail()
     const htmlPath = path.join(__dirname, 'output', 'email.html ')
@@ -26,8 +26,7 @@ async function enviaEmail() {
       }
     ])
     if (!confirmaCorpo.corpo) {
-      const config = await utils.loadConfig
-      opn(config.conteudoPath)
+      opn(config.path.conteudoPath)
       throw 'Encerrado. Email não Aprovado'
     }
 
@@ -37,7 +36,7 @@ async function enviaEmail() {
         name: 'lote',
         type: 'list',
         message: 'Escolha o lote',
-        choices: ['Email unico', ...fs.readdirSync(LOTEDIRTEMP)]
+        choices: ['Email unico', ...fs.readdirSync(config.path.lotesPath)]
       }
     ])
 
@@ -45,7 +44,9 @@ async function enviaEmail() {
     if (confirmaLote.lote === 'Email unico') {
       db = await utils.dbUnico()
     } else {
-      const adapter = new FileSync(path.join(LOTEDIRTEMP, confirmaLote.lote))
+      const adapter = new FileSync(
+        path.join(config.lotesPath, confirmaLote.lote)
+      )
       db = low(adapter)
     }
 
@@ -131,4 +132,4 @@ async function enviaEmail() {
   }
 }
 
-enviaEmail()
+module.exports = enviaEmail

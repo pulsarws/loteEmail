@@ -31,6 +31,7 @@
           "request": "launch",
           "name": "Launch atual",
           "program": "${file}",
+          "args": ["iniciaenvios"],
           "console": "integratedTerminal",
           "skipFiles": [
               "${workspaceRoot}/node_modules/**/*.js",
