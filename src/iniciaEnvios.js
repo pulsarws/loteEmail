@@ -5,18 +5,20 @@ const opn = require('opn')
 const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
 
-const utils = require('./utils')
-const geraEmail = require('./geraEmail')
+const configUtil = require('./lib/configUtil')
+configUtil.testConfig()
+const config = configUtil.getConfig()
+const utils = require('./lib/utils')
+const geraEmail = require('./lib/geraEmail')
 
 async function enviaEmail() {
   try {
-    // Carrega config.yml
-    const config = utils.loadConfig()
     // Confirma corpo do email
     const html = await geraEmail()
-    const htmlPath = path.join(__dirname, 'output', 'email.html ')
+    const htmlPath = path.normalize(__dirname + '/../output/email.html')
     fs.writeFileSync(htmlPath, html, 'utf8')
     opn(htmlPath)
+
     const confirmaCorpo = await inquirer.prompt([
       {
         type: 'confirm',
@@ -45,7 +47,7 @@ async function enviaEmail() {
       db = await utils.dbUnico()
     } else {
       const adapter = new FileSync(
-        path.join(config.lotesPath, confirmaLote.lote)
+        path.join(config.path.lotesPath, confirmaLote.lote)
       )
       db = low(adapter)
     }
@@ -132,4 +134,4 @@ async function enviaEmail() {
   }
 }
 
-module.exports = enviaEmail
+enviaEmail()

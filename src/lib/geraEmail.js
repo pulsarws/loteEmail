@@ -7,16 +7,14 @@ const _ = require('lodash')
 const inquirer = require('inquirer')
 const xlsx = require('xlsx-to-json')
 
-const utils = require('./utils')
+const configUtil = require('./configUtil')
+const config = configUtil.getConfig()
 
 const xlsxPromise = promisify(xlsx)
 shell.config.silent = true
 
 async function geraEmail() {
   try {
-    // Carrega config.yml
-    const config = utils.loadConfig()
-
     // Gera context do hbs  
     const arquivo = await inquirer.prompt([
       {
@@ -59,7 +57,7 @@ async function geraEmail() {
     }
 
     //Gera html
-    const template = fs.readFileSync(path.join(__dirname, 'lista.hbs'), 'utf8')
+    const template = fs.readFileSync(path.normalize(__dirname + '/../template/lista.hbs'), 'utf8')
     const output = handlebars.compile(template)(context)
 
     return output

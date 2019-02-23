@@ -5,13 +5,12 @@ const inquirer = require('inquirer')
 const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync.js')
 
-const utils = require('./utils')
+const configUtil = require('./lib/configUtil')
+configUtil.testConfig()
+const config = configUtil.getConfig()
 
 async function geraLote() {
   try {
-    // Carrega config.yml
-    const config = utils.loadConfig()
-
     // Escolha arquivo
     const listaArquivosDados = fs.readdirSync(config.path.listasEmailPath, 'utf8')
     const escolha = await inquirer.prompt([
@@ -59,4 +58,4 @@ async function geraLote() {
   }
 }
 
-module.exports = geraLote
+geraLote()
