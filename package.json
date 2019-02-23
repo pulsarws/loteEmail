@@ -2,11 +2,12 @@
     "name": "loteemail",
     "version": "1.0.0",
     "description": "",
-    "main": "geraLote.js",
+    "main": "adm.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "lote": "node ./src/geraLote.js",
-        "envia": "node ./src/iniciaEnvios.js"
+        "envia": "node ./src/iniciaEnvios.js",
+        "adm": "node ./src/adm.js"
     },
     "author": "",
     "license": "ISC",
