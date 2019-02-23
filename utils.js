@@ -44,7 +44,8 @@ const tempo = valorSegundos => {
 const espera = segundos => {
   return new Promise(resolve => {
     const bar = new ProgressBar('Proximo: :falta', {
-      total: segundos, width: 10
+      total: segundos,
+      width: 10
     })
 
     var falta = tempo(segundos - bar.curr)
@@ -66,7 +67,7 @@ async function enviaEmail(to, html, subject) {
     const transport = config.transport
     const transporter = nodemailer.createTransport(transport)
     const mailOptions = {
-      from: transport.auth.user,
+      from: { name: transport.auth.name, address: transport.auth.user },
       to,
       subject,
       html
