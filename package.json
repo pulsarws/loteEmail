@@ -26,8 +26,8 @@
     },
     "pkg": {
         "assets": [
-            "lista.hbs",
-            "configExemplo.yml"
+            "./src/template/lista.hbs",
+            "./src/configconfigExemplo.yml"
         ]
     }
 }

@@ -4,6 +4,7 @@ const inquirer = require('inquirer')
 const opn = require('opn')
 const lowdb = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
+const yaml = require('js-yaml')
 
 const configUtil = require('./lib/configUtil')
 
@@ -77,6 +78,16 @@ async function adm() {
   
       `
       console.log(loteInfo)
+      const verLog = await inquirer.prompt([{
+        name: 'log',
+        message: 'Deseja ver o log?',
+        type: 'confirm',
+        default: false
+      }])
+      var log = yaml.safeDump(db.get('log').value())
+
+      if (verLog.log) console.log('\n\nLog\n---\n\n' + log)
+
     }
   } catch (error) {
     console.log(error)

@@ -7,6 +7,7 @@ transport:
   port: 
   secure: true
   auth:
+    name: ''
     user: ''
     pass: ''
   tls:

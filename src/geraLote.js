@@ -48,6 +48,7 @@ async function geraLote() {
     const db = low(adapter)
 
     db.set('lote', listaEmail).write()
+    db.set('log', []).write()
 
     console.log('Salvo com Sucesso. Saindo em 5 segundos')
     setTimeout(() => {}, 5000)

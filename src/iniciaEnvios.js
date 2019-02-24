@@ -109,13 +109,14 @@ async function enviaEmail() {
     const date = new Date()
 
     for (var item of enviar) {
-      await utils.enviaEmail(
+      const envioResult = await utils.enviaEmail(
         item.email,
         html,
         `Imóveis Disponíveis - ${date.getDate()}/${date.getMonth() +
           1}/${date.getFullYear()}`
       )
       console.log(`Email para ${item.email} enviado com sucesso`)
+      db.get('log').push(envioResult).write()
       db.get('lote')
         .find({
           email: item.email
