@@ -61,11 +61,11 @@ async function adm() {
       const loteInfo = `
       Email enviados
       --------------
-      ${enviados}
+      ${enviados.join('\n')}
   
       Email a enviar
       --------------
-      ${enviar}
+      ${enviar.join('\n')}
   
       =============
       Total enviado: ${enviados.length}
