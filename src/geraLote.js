@@ -32,6 +32,7 @@ async function geraLote() {
       .split('\n')
       .drop()
       .compact()
+      .uniq()
       .map(email => ({
         email,
         enviado: false
