@@ -1,7 +1,8 @@
 const _ = require('lodash')
-const opn = require('opn')
+const yaml = require('js-yaml')
+// const opn = require('opn')
 
-opn('/home/eduardo/projects/loteEmail')
+// opn('/home/eduardo/projects/loteEmail')
 
 var a = [
   { userId: 'p1', item: 1 },
@@ -16,20 +17,80 @@ var b = [
   { userId: 'p4', profile: 4 }
 ]
 
-function join(local, foreign, localKey, foreignKey, as = 'foreign') {
+function join({ local, foreign, localKey, foreignKey, as = 'foreign' }) {
   return _.map(local, itemLocal =>
     _.assign(
       itemLocal,
       _.fromPairs([
-        'as',
-        _.filter(
-          foreign,
-          foreignItem => itemLocal[localKey] === foreignItem[foreignKey]
-        )
+        [
+          as,
+          _.filter(
+            foreign,
+            foreignItem =>
+              _.at(itemLocal, localKey)[0] === _.at(foreignItem, foreignKey)[0]
+          )
+        ]
       ])
     )
   )
 }
 
-const result = join(a, b, 'userId', 'userId', 'b')
-console.log(JSON.stringify(result, undefined, 2))
+function join3({ local, foreign, localKey, foreignKey, as = 'foreign' }) {
+  return _.map(local, itemLocal => {
+    const lookup = _.filter(foreign, foreignItem => {
+      return _.at(itemLocal, localKey)[0] === _.at(foreignItem, foreignKey)[0]
+    })
+    const foreignObj = _.fromPairs([[as, lookup]])
+    return _.assign(itemLocal, foreignObj)
+  })
+}
+
+const result = join3({
+  local: a,
+  foreign: b,
+  localKey: 'userId',
+  foreignKey: 'userId',
+  as: 'foreign'
+})
+
+const withRepeat = [
+  { a: 'oi' },
+  { a: 'ola' },
+  { a: 'oie' },
+  { a: 'oi' },
+  { a: 'oie' },
+  { a: 'oi' },
+  { a: 'oie' },
+  { a: 'oi' },
+  { a: 'ola' }
+]
+
+const repetido = (arr, key) => {
+  return _.chain(arr)
+    .groupBy(key)
+    .map((item, keyGrouped) =>
+      item.length > 1 ? _.fromPairs([[keyGrouped, item.length]]) : null
+    )
+    .compact()
+    .thru(result => yaml.safeDump(result))
+    .value()
+}
+
+const repetido2 = (arr, key) =>
+  _.chain(arr)
+    .uniqBy(key)
+    .xor(arr)
+    .countBy(key)
+    .thru(result => yaml.safeDump(result))
+    .value()
+
+const result2 = repetido2(withRepeat, 'a')
+console.log(result2)
+console.log(yaml.safeLoad(result2))
+
+var aa = [1,2,3]
+aa.push(4,5)
+console.log(aa)
+var ab = new Date()
+console.log(ab.toString())
+

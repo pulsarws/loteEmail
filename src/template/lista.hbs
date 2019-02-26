@@ -10,16 +10,16 @@
 <body style="width: 600px; margin: 3em auto">
   <p>Prezado(a), </p>
   <br>
-  <p>{{texto.introdução}}</p>
-  <p style="padding: 0.5em 0; font-size: 1.1em; font-weight: bolder">{{texto.condições}}</p>
-  <p style="padding: 1em; border: 2px solid red"><b>NOVIDADES:</b> {{texto.novidades}}</p>
+  <p>{{{texto.introdução}}}</p>
+  <p style="padding: 0.5em 0; font-size: 1.1em; font-weight: bolder">{{{texto.condições}}}</p>
+  <p style="padding: 1em; border: 2px solid red"><b>NOVIDADES:</b> {{{texto.novidades}}}</p>
 
   {{#each imoveis as | lista Tipo |}}
   <section>
     <h2 style="border-bottom: 1px solid black; margin: 1em 0">{{Tipo}}</h2>
     {{#each lista as | imovel |}}
     <h3 style="margin-bottom: 1em">{{imovel.Nome}}</h3>
-    <p>{{imovel.Descricao}}</p>
+    <p>{{{imovel.Descricao}}}</p>
     <table style="width: 100%; border-collapse: collapse">
       <tr>
         <td style="border: 1px solid #ccc; padding: 8px">Endereço</td>

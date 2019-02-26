@@ -59,6 +59,7 @@ async function adm() {
         .get('false')
         .map(item => item.email)
         .value()
+      /* eslint-disable*/
       const loteInfo = `
       Email enviados
       --------------
@@ -74,20 +75,21 @@ async function adm() {
       Total geral: ${db
         .get('lote')
         .size()
-        .value()}
-  
+        .value()} 
       `
+      /* eslint-enable*/
       console.log(loteInfo)
-      const verLog = await inquirer.prompt([{
-        name: 'log',
-        message: 'Deseja ver o log?',
-        type: 'confirm',
-        default: false
-      }])
+      const verLog = await inquirer.prompt([
+        {
+          name: 'log',
+          message: 'Deseja ver o log?',
+          type: 'confirm',
+          default: false
+        }
+      ])
       var log = yaml.safeDump(db.get('log').value())
 
       if (verLog.log) console.log('\n\nLog\n---\n\n' + log)
-
     }
   } catch (error) {
     console.log(error)
