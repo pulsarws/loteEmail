@@ -45,13 +45,14 @@ function join3({ local, foreign, localKey, foreignKey, as = 'foreign' }) {
   })
 }
 
-const result = join3({
+const result1 = join3({
   local: a,
   foreign: b,
   localKey: 'userId',
   foreignKey: 'userId',
   as: 'foreign'
 })
+// console.log(yaml.safeDump(result1))
 
 const withRepeat = [
   { a: 'oi' },
@@ -65,32 +66,21 @@ const withRepeat = [
   { a: 'ola' }
 ]
 
-const repetido = (arr, key) => {
-  return _.chain(arr)
-    .groupBy(key)
-    .map((item, keyGrouped) =>
-      item.length > 1 ? _.fromPairs([[keyGrouped, item.length]]) : null
-    )
-    .compact()
-    .thru(result => yaml.safeDump(result))
-    .value()
-}
-
-const repetido2 = (arr, key) =>
+const repetido = (arr, key) =>
   _.chain(arr)
     .uniqBy(key)
     .xor(arr)
     .countBy(key)
-    .thru(result => yaml.safeDump(result))
+    .thru(obj => yaml.safeDump(obj))
     .value()
 
-const result2 = repetido2(withRepeat, 'a')
-console.log(result2)
-console.log(yaml.safeLoad(result2))
+const repetido2 = arr =>
+  _.chain(arr)
+    .countBy()
+    .pickBy(v => v > 1)
+    .thru(obj => yaml.safeDump(obj))
+    .value()
 
-var aa = [1,2,3]
-aa.push(4,5)
-console.log(aa)
-var ab = new Date()
-console.log(ab.toString())
-
+const withRepeat2 = [1, 2, 3, 2, 4, 3, 3]
+const result = repetido2(withRepeat2)
+console.log(result)
