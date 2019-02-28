@@ -65,9 +65,9 @@ async function geraLote() {
     db.set('log', []).write()
 
     console.log(
-      'Os seguintes e-mails estão repetidos\nVeja na tabela abaixo quantos registros voce deve apagar da Lista de Emails:\n' +
+      'Os seguintes e-mails estão repetidos\nVeja na tabela abaixo quantos registros voce deve apagar da Lista de Emails. Apague-os manualmente.\n' +
         repetido +
-        '\nForam descartados emails repetidos, então pode continuar com a geração do Lote.'
+        '\nForam descartados emails repetidos, então pode usar o lote gerado.'
     )
     console.log('Salvo com Sucesso. Saindo em 5 segundos')
     setTimeout(() => {}, 5000)
