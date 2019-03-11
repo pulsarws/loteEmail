@@ -1,3 +1,5 @@
+const fs = require('fs')
+const path = require('path')
 const ProgressBar = require('progress')
 const nodemailer = require('nodemailer')
 const inquirer = require('inquirer')
@@ -70,8 +72,17 @@ async function dbUnico() {
   return db
 }
 
+async function chooseFile(folder, message) {
+  const choices = fs.readdirSync(folder)
+  const prompt = await inquirer.prompt([
+    { type: 'list', name: 'files', message, choices }
+  ])
+  return path.join(folder,prompt.files)
+}
+
 module.exports = {
   espera,
   enviaEmail,
-  dbUnico
+  dbUnico,
+  chooseFile
 }
