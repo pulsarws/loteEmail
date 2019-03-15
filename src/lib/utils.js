@@ -6,6 +6,9 @@ const inquirer = require('inquirer')
 const low = require('lowdb')
 const Memory = require('lowdb/adapters/Memory')
 const htmlToText = require('html-to-text')
+const promisify = require('util').promisify
+const xlsx = require('xlsx-to-json')
+
 
 const configUtil = require('./configUtil')
 
@@ -72,17 +75,21 @@ async function dbUnico() {
   return db
 }
 
-async function chooseFile(folder, message) {
-  const choices = fs.readdirSync(folder)
+async function chooseFile(folder, message, filter) {
+  var choices = fs.readdirSync(folder)
+  if (filter) choices = choices.filter(filter)
   const prompt = await inquirer.prompt([
     { type: 'list', name: 'files', message, choices }
   ])
-  return path.join(folder,prompt.files)
+  return path.join(folder, prompt.files)
 }
+
+const xlsxPromise = promisify(xlsx)
 
 module.exports = {
   espera,
   enviaEmail,
   dbUnico,
-  chooseFile
+  chooseFile,
+  xlsxPromise
 }
