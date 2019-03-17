@@ -48,6 +48,47 @@ class GeraLote {
       .set('log', [])
       .write()
   }
+
+  static consulta(lotePath) {
+    const adapter = new FileSync(lotePath)
+    const db = low(adapter)
+    const grouped = db.get('lote').groupBy('enviado')
+    const enviados = grouped
+      .get('true')
+      .map(item => item.email)
+      .value()
+    const enviar = grouped
+      .get('false')
+      .map(item => item.email)
+      .value()
+
+    /* eslint-disable*/
+    const loteInfo = `
+      Email enviados
+      --------------
+      ${enviados.join('\n')}
+  
+      Email a enviar
+      --------------
+      ${enviar.join('\n')}
+  
+      =============
+      Total enviado: ${enviados.length}
+      Total a enviar: ${enviar.length}
+      Total geral: ${db
+        .get('lote')
+        .size()
+        .value()} 
+      `
+    /* eslint-enable*/
+    return loteInfo
+  }
+
+  static getLog(lotePath) {
+    const adapter = new FileSync(lotePath)
+    const db = low(adapter)
+    return yaml.safeDump(db.get('log').value())
+  }
 }
 
 module.exports = GeraLote

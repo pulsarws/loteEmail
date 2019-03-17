@@ -4,7 +4,7 @@
     "description": "",
     "main": "adm.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "./node_modules/mocha/bin/mocha",
         "lote": "node ./src/geraLote.js",
         "envia": "node ./src/iniciaEnvios.js",
         "start": "node ./src/adm.js"
@@ -29,5 +29,9 @@
             "./src/template/lista.hbs",
             "./src/configconfigExemplo.yml"
         ]
+    },
+    "devDependencies": {
+        "chai": "^4.2.0",
+        "mocha": "^6.0.2"
     }
 }

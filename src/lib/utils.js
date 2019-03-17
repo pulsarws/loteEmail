@@ -3,8 +3,6 @@ const path = require('path')
 const ProgressBar = require('progress')
 const nodemailer = require('nodemailer')
 const inquirer = require('inquirer')
-const low = require('lowdb')
-const Memory = require('lowdb/adapters/Memory')
 const htmlToText = require('html-to-text')
 const promisify = require('util').promisify
 const xlsx = require('xlsx-to-json')
@@ -58,23 +56,6 @@ async function enviaEmail(to, html, subject) {
   }
 }
 
-async function dbUnico() {
-  const emailUnico = await inquirer.prompt([
-    {
-      type: 'input',
-      message: 'Digite o email para enviar',
-      name: 'unico'
-    }
-  ])
-  const adapter = new Memory()
-  const db = low(adapter)
-  db.defaults({ lote: [] })
-    .set('lote', [{ email: emailUnico.unico, enviado: false }])
-    .write()
-
-  return db
-}
-
 async function chooseFile(folder, message, filter) {
   var choices = fs.readdirSync(folder)
   if (filter) choices = choices.filter(filter)
@@ -89,7 +70,6 @@ const xlsxPromise = promisify(xlsx)
 module.exports = {
   espera,
   enviaEmail,
-  dbUnico,
   chooseFile,
   xlsxPromise
 }

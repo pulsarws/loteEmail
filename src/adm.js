@@ -1,12 +1,12 @@
 const path = require('path')
 const fs = require('fs')
-const inquirer = require('inquirer')
+const {prompt} = require('inquirer')
 const opn = require('opn')
-const lowdb = require('lowdb')
-const FileSync = require('lowdb/adapters/FileSync')
-const yaml = require('js-yaml')
 
 const configUtil = require('./lib/configUtil')
+const { consulta, getLog } = require('./lib/GeraLote')
+const geraLote = require('./prompt/geraLote')
+const geraEmail = require('./prompt/geraEmail')
 
 configUtil.testConfig()
 const config = configUtil.getConfig()
@@ -22,7 +22,7 @@ async function adm() {
       'Gera novo Lote',
       'Sair'
     ]
-    const opcao = await inquirer.prompt([
+    const opcao = await prompt([
       {
         name: 'opcao',
         message: 'Escolha a opcao desejada',
@@ -35,12 +35,12 @@ async function adm() {
     if (opcao.opcao === choices[1]) opn(config.path.conteudoPath)
     if (opcao.opcao === choices[3])
       opn(path.join(__dirname, 'config', 'config.yml'))
-    if (opcao.opcao === choices[4]) require('./iniciaEnvios')
-    if (opcao.opcao === choices[5]) require('./geraLote')
+    if (opcao.opcao === choices[4]) await geraEmail()
+    if (opcao.opcao === choices[5]) await geraLote()
 
     if (opcao.opcao === choices[2]) {
       const choicesLotes = fs.readdirSync(config.path.lotesPath)
-      const lote = await inquirer.prompt([
+      const lote = await prompt([
         {
           name: 'lotes',
           type: 'list',
@@ -48,37 +48,8 @@ async function adm() {
           choices: choicesLotes
         }
       ])
-      const adapter = new FileSync(path.join(config.path.lotesPath, lote.lotes))
-      const db = lowdb(adapter)
-      const grouped = db.get('lote').groupBy('enviado')
-      const enviados = grouped
-        .get('true')
-        .map(item => item.email)
-        .value()
-      const enviar = grouped
-        .get('false')
-        .map(item => item.email)
-        .value()
-      /* eslint-disable*/
-      const loteInfo = `
-      Email enviados
-      --------------
-      ${enviados.join('\n')}
-  
-      Email a enviar
-      --------------
-      ${enviar.join('\n')}
-  
-      =============
-      Total enviado: ${enviados.length}
-      Total a enviar: ${enviar.length}
-      Total geral: ${db
-        .get('lote')
-        .size()
-        .value()} 
-      `
-      /* eslint-enable*/
-      console.log(loteInfo)
+      const arquivoLote = path.join(config.path.lotesPath, lote.lotes)
+      console.log(consulta(arquivoLote))
       const verLog = await inquirer.prompt([
         {
           name: 'log',
@@ -87,9 +58,7 @@ async function adm() {
           default: false
         }
       ])
-      var log = yaml.safeDump(db.get('log').value())
-
-      if (verLog.log) console.log('\n\nLog\n---\n\n' + log)
+      if (verLog.log) console.log(getLog(arquivoLote))
     }
   } catch (error) {
     console.log(error)
