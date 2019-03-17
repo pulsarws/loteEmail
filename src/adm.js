@@ -50,7 +50,7 @@ async function adm() {
       ])
       const arquivoLote = path.join(config.path.lotesPath, lote.lotes)
       console.log(consulta(arquivoLote))
-      const verLog = await inquirer.prompt([
+      const verLog = await prompt([
         {
           name: 'log',
           message: 'Deseja ver o log?',

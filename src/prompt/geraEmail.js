@@ -6,7 +6,7 @@ const { prompt } = require('inquirer')
 const { chooseFile } = require('../lib/utils')
 const GeraEmail = require('../lib/GeraEmail')
 const Envio = require('../lib/Envio')
-const configUtil = require('./configUtil')
+const configUtil = require('../lib/configUtil')
 
 const config = configUtil.getConfig()
 
@@ -26,7 +26,7 @@ async function geraEmail() {
 
     const geraEmail = new GeraEmail({ arquivoLista, arquivoTexto })
     const html = await geraEmail.getHtml()
-    const htmlPath = path.normalize(__dirname + '/../output/email.html')
+    const htmlPath = path.normalize(__dirname + '/../../output/email.html')
     fs.writeFileSync(htmlPath, html, 'utf8')
     opn(htmlPath)
 
@@ -53,7 +53,7 @@ async function geraEmail() {
       }
     ])
     var unico = promptLote.lote === 'Email unico' ? true : false
-    if (!unico) {
+    if (unico) {
       unico = await prompt([
         {
           type: 'input',
@@ -90,7 +90,7 @@ async function geraEmail() {
     if (!confirmaEnvio.envio) throw 'Envio cancelado pelo usuário'
 
     //Envia emails
-    await envio.enviar(Number(confirmaEnvio.intervalo) * 60)
+    await envio.sendmail(Number(confirmaEnvio.intervalo))
     console.log('\n')
     return html
   } catch (error) {

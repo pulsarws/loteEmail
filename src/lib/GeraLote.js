@@ -87,7 +87,8 @@ class GeraLote {
   static getLog(lotePath) {
     const adapter = new FileSync(lotePath)
     const db = low(adapter)
-    return yaml.safeDump(db.get('log').value())
+    const log =  yaml.safeDump(db.get('log').value())
+    return '\n\nLog\n---\n\n' + log
   }
 }
 

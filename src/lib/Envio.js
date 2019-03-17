@@ -17,7 +17,8 @@ class Envio {
     } else {
       const adapter = new Memory()
       this.db = low(adapter)
-      this.db.defaults({ lote: [] })
+      this.db
+        .defaults({ lote: [] })
         .set('lote', [{ email: unico, enviado: false }])
         .write()
     }
@@ -60,22 +61,20 @@ class Envio {
     return text
   }
 
-  static convertDate(date) {
-    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
-  }
-
-  async enviar(intervalo) {
+  async sendmail(intervalo) {
     for (var item of this.enviar) {
       const date = new Date()
+      const dateString = `${date.getDate()}/${date.getMonth() +
+        1}/${date.getFullYear()}`
       var envioResult = await enviaEmail(
         item.email,
         this.html,
-        `Imóveis Disponíveis - ${this.convertDate(date)}`
+        `Imóveis Disponíveis - ${dateString}`
       )
 
       console.log(`Email para ${item.email} enviado com sucesso`)
       const { db } = this
-      db.get('log').push({ envioResult, timestamp: date })
+      db.get('log').push({ envioResult, timestamp: date }).write()
       db.get('lote')
         .find({
           email: item.email
